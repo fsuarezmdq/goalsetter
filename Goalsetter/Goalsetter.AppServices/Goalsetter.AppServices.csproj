@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Goalsetter.DataAccess\Goalsetter.DataAccess.csproj" />
+    <ProjectReference Include="..\Goalsetter.DomainLogic\Goalsetter.Domains.csproj" />
+  </ItemGroup>
+
+</Project>
