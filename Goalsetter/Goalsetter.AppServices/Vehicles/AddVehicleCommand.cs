@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Goalsetter.Domains.ValueObjects;
 
 namespace Goalsetter.AppServices.Vehicles
 {
@@ -16,34 +17,42 @@ namespace Goalsetter.AppServices.Vehicles
         public string Makes { get; }
         public string Model { get; }
         public int Year { get; }
+        public int RentalPrice { get; }
 
-        public AddVehicleCommand(string makes, string model, int year)
+        public AddVehicleCommand(string makes, string model, int year, int price)
         {
             Makes = makes;
             Model = model;
             Year = year;
+            RentalPrice = price;
         }
 
         internal sealed class AddVehicleCommandHandler : ICommandHandler<AddVehicleCommand>
         {
-            private readonly UnitOfWork _unitOfWork;
-            public AddVehicleCommandHandler(UnitOfWork unitOfWork)
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IVehicleRepository _vehicleRepository;
+            public AddVehicleCommandHandler(IUnitOfWork unitOfWork,IVehicleRepository vehicleRepository)
             {
-                _unitOfWork = unitOfWork;
+                _unitOfWork = unitOfWork ?? throw  new NullReferenceException($"{nameof(IUnitOfWork)} not defined in {nameof(AddVehicleCommandHandler)}");
+                _vehicleRepository = vehicleRepository ?? throw new NullReferenceException($"{nameof(IVehicleRepository)} not defined in {nameof(AddVehicleCommandHandler)}");
             }
 
             public async Task<Result> Handle(AddVehicleCommand command)
             {
-                var vehicleRepository = new VehicleRepository(_unitOfWork);
-
                 Result<VehicleMakes> vehicleMakes = VehicleMakes.Create(command.Makes);
                 if (vehicleMakes.IsFailure) throw new ArgumentException(vehicleMakes.Error);
-                               
-                var result = Vehicle.Create(vehicleMakes.Value, command.Model, command.Year);
-                if(result.IsFailure)
-                    return Result.Failure($"Could not create the vechicle. {result.Error} ");
 
-                vehicleRepository.Add(result.Value);
+                Result<VehicleModel> vehicleModel = VehicleModel.Create(command.Model);
+                if (vehicleModel.IsFailure) throw new ArgumentException(vehicleModel.Error);
+
+                Result<Price> rentalPrice = Price.Create(command.RentalPrice);
+
+
+                Result<Vehicle> vehicle = Vehicle.Create(vehicleMakes.Value, vehicleModel.Value, command.Year, rentalPrice.Value);
+                if(vehicle.IsFailure)
+                    return Result.Failure($"Could not create the vehicle. {vehicle.Error} ");
+
+                _vehicleRepository.Add(vehicle.Value);
 
                 await _unitOfWork.Commit();
 

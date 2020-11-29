@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Goalsetter.DataAccess
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IDisposable, IUnitOfWork
     {
         private readonly AppContext _dbContext;
         private bool _disposed;
@@ -29,9 +29,9 @@ namespace Goalsetter.DataAccess
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<T> GetAsync<T>(Guid guid) where T : AggregateRoot
+        public IQueryable<T> GetAsync<T>(Guid guid) where T : AggregateRoot
         {
-            return await _dbContext.Set<T>().SingleAsync(p => p.Id == guid);
+            return _dbContext.Set<T>().Where(p => p.Id == guid);
         }
 
         public void Update<T>(T entity)

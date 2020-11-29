@@ -8,38 +8,34 @@ using System.Threading.Tasks;
 
 namespace Goalsetter.DataAccess.Repositories
 {
-    public class VehicleRepository : IVehicleRepository
+    public class ClientRepository : IClientRepository
     {
         private readonly IUnitOfWork _unitOfWork;
-        public VehicleRepository(IUnitOfWork unitOfWork)
+        public ClientRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }              
 
-        public async Task<Vehicle> GetByIdAsync(Guid guid)
+        public async Task<Client> GetByIdAsync(Guid guid)
         {
-            return await _unitOfWork.GetAsync<Vehicle>(guid)
-                .Include(p => p.RentalPrice)
-                .Include(p => p.Rentals)
+            return await _unitOfWork.GetAsync<Client>(guid)
+                .Include(p=> p.Rentals)
                 .FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Vehicle>> GetAsync()
+        public async Task<IEnumerable<Client>> GetAsync()
         {
-            return await _unitOfWork.Query<Vehicle>()
-                .Include(p=> p.RentalPrice)
-                .Include(p=>p.Rentals)
-                    .ThenInclude(p=> p.Client)
+            return await _unitOfWork.Query<Client>()
                 .Where(p=> p.IsActive)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public void Save(Vehicle vehicle)
+        public void Save(Client vehicle)
         {
             _unitOfWork.Update(vehicle);
         }
-        public void Add(Vehicle vehicle)
+        public void Add(Client vehicle)
         {
             _unitOfWork.Add(vehicle);
         }    

@@ -1,8 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Goalsetter.AppServices;
+using Goalsetter.AppServices.Clients;
 using Goalsetter.AppServices.Dtos;
-using Goalsetter.AppServices.Vehicles;
-using Goalsetter.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -11,11 +10,11 @@ namespace Goalsetter.WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class VehicleController: BaseController
+    public class ClientController: BaseController
     {
         private readonly Messages _messages;        
 
-        public VehicleController(Messages messages)
+        public ClientController(Messages messages)
         {
             _messages = messages;
         }
@@ -24,15 +23,15 @@ namespace Goalsetter.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetListAsync()
         {
-            var result = await _messages.Dispatch(new GetVehicleListAsyncQuery());
+            var result = await _messages.Dispatch(new GetClientListAsyncQuery());
 
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] NewVehicleDto dto)
+        public async Task<IActionResult> Add([FromBody] NewClientDto dto)
         {
-            var command = new AddVehicleCommand(dto.Makes,dto.Model,dto.Year,dto.RentalPrice);
+            var command = new AddClientCommand(dto.Name,dto.Email);
 
             Result result = await _messages.Dispatch(command);
 
@@ -42,7 +41,7 @@ namespace Goalsetter.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(Guid id)
         {
-            Result result = await _messages.Dispatch(new RemoveVehicleCommand(id));
+            Result result = await _messages.Dispatch(new RemoveClientCommand(id));
 
             return FromResult(result);
         }

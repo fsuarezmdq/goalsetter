@@ -22,19 +22,22 @@ namespace Goalsetter.AppServices.Vehicles
 
         internal sealed class RemoveVehicleCommandHandler : ICommandHandler<RemoveVehicleCommand>
         {
-            private readonly UnitOfWork _unitOfWork;
-            public RemoveVehicleCommandHandler(UnitOfWork unitOfWork)
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IVehicleRepository _vehicleRepository;
+            public RemoveVehicleCommandHandler(IUnitOfWork unitOfWork, IVehicleRepository vehicleRepository)
             {
-                _unitOfWork = unitOfWork;
+                _unitOfWork = unitOfWork ?? throw new NullReferenceException($"{nameof(IUnitOfWork)} not defined in {nameof(RemoveVehicleCommandHandler)}");
+                _vehicleRepository = vehicleRepository ?? throw new NullReferenceException($"{nameof(IVehicleRepository)} not defined in {nameof(RemoveVehicleCommandHandler)}");
             }
 
             public async Task<Result> Handle(RemoveVehicleCommand command)
             {
-                var vehicleRepository = new VehicleRepository(_unitOfWork);
-
-                Vehicle vehicle = await vehicleRepository.GetByIdAsync(command.Id);
+                Vehicle vehicle = await _vehicleRepository.GetByIdAsync(command.Id);
                 if (vehicle == null)
                     return Result.Failure($"No vehicle found for Id {command.Id}");
+
+                if (vehicle.CanRemove() != string.Empty)
+                    return Result.Failure($"The vehicle {command.Id} was already removed");
 
                 vehicle.Remove();
 

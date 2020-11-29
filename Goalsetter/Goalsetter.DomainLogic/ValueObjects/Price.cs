@@ -1,16 +1,14 @@
-﻿using CSharpFunctionalExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
-namespace Goalsetter.Domains
+namespace Goalsetter.Domains.ValueObjects
 {
     public class Price : ValueObject
     {
         public const decimal MinPriceValue = 0;
+        public static Price Undefined => new Price(0);
         public decimal Value { get; }
+        
 
         private Price(decimal value)
         {
@@ -28,6 +26,16 @@ namespace Goalsetter.Domains
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;
+        }
+
+        public static implicit operator decimal(Price price)
+        {
+            return price.Value;
+        }
+
+        public static explicit operator Price(decimal price)
+        {
+            return Create(price).Value;
         }
     }
 }

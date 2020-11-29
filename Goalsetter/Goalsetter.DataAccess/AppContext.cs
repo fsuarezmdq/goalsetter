@@ -5,46 +5,77 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Goalsetter.DataAccess.EntityConfiguration;
+using Goalsetter.Domains.ValueObjects;
+using Microsoft.Extensions.Configuration;
 
 namespace Goalsetter.DataAccess
 {
     public class AppContext : DbContext
     {
-       // private readonly CommandsConnectionString _commandsConnectionString;
         public DbSet<Vehicle> Vehicles { get; set; }
-        public DbSet<VehiclePrice> VehiclePrice { get; set; }
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<VehiclePrice> VehiclePrices { get; set; }
+        public DbSet<Rental> Rentals { get; set; }
 
-        public AppContext()
+        public AppContext()//(IConfiguration configuration)
         {
-
+            //_configuration = configuration;
         }
         public AppContext(DbContextOptions<AppContext> options)
         : base(options)
         {
+            
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;Initial " +
-                "Catalog=VEHICLE_RENTAL_DEV;Integrated Security=True",
-              x => x.MigrationsAssembly("Goalsetter.DataAccess"));
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    //optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;Initial " +
+        //    //    "Catalog=VEHICLE_RENTAL_DEV;Integrated Security=True",
+        //    //  x => x.MigrationsAssembly("Goalsetter.DataAccess"));
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new VehicleEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ClientEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new VehiclePriceEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new RentalEntityTypeConfiguration());
 
             AddSeedData(modelBuilder);
         }
 
         private static void AddSeedData(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Vehicle>().HasData
+            //Anonymous types required to create an object without Vehicle price.
+            var vehicles = new []
+            {
+                new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Chevrolet",
+                    Model = (VehicleModel)"Cruze", UpdatedDate = DateTime.UtcNow, Year = 2017 }, 
+                new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Chevrolet",
+                    Model = (VehicleModel)"Corsa", UpdatedDate = DateTime.UtcNow, Year = 2011},
+                new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Ford", 
+                    Model = (VehicleModel)"F-100", UpdatedDate = DateTime.UtcNow, Year = 2000 },
+                new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Fiat", 
+                    Model = (VehicleModel)"Palio", UpdatedDate = DateTime.UtcNow, Year = 2008 }
+            };
+
+            modelBuilder.Entity<Vehicle>().HasData(vehicles);
+
+            modelBuilder.Entity<VehiclePrice>().HasData
             (
-                Vehicle.Create((VehicleMakes)"Chevrolet", "Cruze", 2017).Value,
-                Vehicle.Create((VehicleMakes)"Chevrolet", "Corsa", 2011).Value,
-                Vehicle.Create((VehicleMakes)"Ford", "F-100", 2000).Value,
-                Vehicle.Create((VehicleMakes)"Fiat", "Palio", 2008).Value
+                VehiclePrice.Create(vehicles[0].Id, (Price)150).Value,
+                VehiclePrice.Create(vehicles[1].Id, (Price)100).Value,
+                VehiclePrice.Create(vehicles[2].Id, (Price)120).Value,
+                VehiclePrice.Create(vehicles[3].Id, (Price)80).Value
+            );
+
+            modelBuilder.Entity<Client>().HasData
+            (
+                Client.Create((ClientName)"José de San Martin", (Email)"jose@sanmartin.com").Value,
+                Client.Create((ClientName)"Mariano Moreno", (Email)"marian@moreno.com").Value,
+                Client.Create((ClientName)"Juan José Castelli", (Email)"jose@castelli.com").Value,
+                Client.Create((ClientName)"Domingo Faustino Sarmiento", (Email)"domi@sarmiento.com").Value
             );
         }
     }

@@ -1,5 +1,8 @@
 using Goalsetter.AppServices;
+using Goalsetter.AppServices.Rentals;
 using Goalsetter.DataAccess;
+using Goalsetter.DataAccess.Extensions;
+using Goalsetter.DataAccess.Repositories;
 using Goalsetter.WebApi.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,13 +33,21 @@ namespace Goalsetter.WebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Goalsetter.WebApi", Version = "v1" });
             });
 
-            services.AddDbContext<AppContext>(options => options.UseSqlServer(Configuration["ConnectionString"],
-                                                    x => x.MigrationsAssembly("Goalsetter.DataAccess")));
+            services.AddDbContext<AppContext>(options => 
+                options.UseSqlServer(Configuration["ConnectionString"], x => x.MigrationsAssembly("Goalsetter.DataAccess"))
+            );
 
             services.AddSingleton<Messages>();
-            
-            services.AddScoped<UnitOfWork>();
+            services.AddSingleton<IRentalService, RentalService>();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            services.AddScoped<IClientRepository, ClientRepository>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IRentalRepository, RentalRepository>();
+
+            
+            
             services.AddHandlers();
         }
 

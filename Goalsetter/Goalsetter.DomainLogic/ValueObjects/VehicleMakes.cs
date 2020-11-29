@@ -1,15 +1,11 @@
-﻿using CSharpFunctionalExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
-namespace Goalsetter.Domains
+namespace Goalsetter.Domains.ValueObjects
 {
     public class VehicleMakes : ValueObject
     {
-        public const int MaxLenth = 250;
+        public const int MaxLength = 250;
         public string Value { get; }
 
         private VehicleMakes(string value)
@@ -24,7 +20,7 @@ namespace Goalsetter.Domains
             if (value.Length == 0)
                 return Result.Failure<VehicleMakes>("Vehicle Makes should not be empty.");
 
-            if (value.Length > MaxLenth)
+            if (value.Length > MaxLength)
                 return Result.Failure<VehicleMakes>("Vehicle Makes name is too long.");
 
             return Result.Success(new VehicleMakes(value));
