@@ -46,8 +46,6 @@ namespace Goalsetter.WebApi
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IRentalRepository, RentalRepository>();
 
-            
-            
             services.AddHandlers();
         }
 

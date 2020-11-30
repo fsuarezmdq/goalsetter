@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
+using Goalsetter.Domains.Utils;
 using Goalsetter.Domains.ValueObjects;
 using Microsoft.VisualBasic;
 
@@ -17,24 +18,24 @@ namespace Goalsetter.Domains
         public Vehicle Vehicle { get; }
         public DateRange DateRange { get; }
         public Price TotalPrice { get; }
-
-
-        public Rental()
+        
+        private Rental()
         {
-                
         }
-        public Rental(Guid id, Client client, Vehicle vehiclePrice, DateRange dateRange, DateTime createdDate, 
-            DateTime updatedDate, Price totalPrice, bool isActive)
+        public Rental(Guid id, Client client, Vehicle vehicle, DateRange dateRange, Price totalPrice, DateTime createdDate, 
+            DateTime updatedDate, bool isActive)
         {
-            Id = (id == default) ? throw new ArgumentNullException(nameof(id)) : id;
-            Client = client ?? throw new ArgumentNullException(nameof(client));
-            Vehicle = vehiclePrice ?? throw new ArgumentNullException(nameof(vehiclePrice));
-            DateRange = dateRange ?? throw new ArgumentNullException(nameof(dateRange));
-            TotalPrice = totalPrice ?? throw new ArgumentNullException(nameof(totalPrice));
-            CreatedDate = createdDate;
-            UpdatedDate = updatedDate;
+            Id = Guard.NotDefault(id);
+            Client = Guard.NotNull(client);
+            Vehicle = Guard.NotNull(vehicle);
+            DateRange = Guard.NotNull(dateRange);
+            TotalPrice = Guard.NotNull(totalPrice);
+            CreatedDate = Guard.NotDefault(createdDate);
+            UpdatedDate = Guard.NotDefault(updatedDate);
             IsActive = isActive;
         }
+
+       
 
         public static Result<Rental> Create(Client client, Vehicle vehicle, DateRange dateRange, Guid id = default)
         {
@@ -49,8 +50,14 @@ namespace Goalsetter.Domains
             if (vehicle == null)
                 return Result.Failure<Rental>("Vehicle is required value.");
 
+            if (!vehicle.IsActive)
+                return Result.Failure<Rental>("Vehicle should be active to create a rental.");
+
             if (vehicle.RentalPrice == null)
                 return Result.Failure<Rental>("Vehicle rental price is required value.");
+
+            if (dateRange == null)
+                return Result.Failure<Rental>("Date Range is required value.");
 
 
             Result vehicleAvailable = vehicle.IsRentable(dateRange);
@@ -59,7 +66,7 @@ namespace Goalsetter.Domains
 
             var totalPrice = CalculateTotalPrice(vehicle.RentalPrice.Price,dateRange);
 
-            return Result.Success(new Rental(guid,client,vehicle, dateRange, DateTimeNow, DateTimeNow, totalPrice, true));
+            return Result.Success(new Rental(guid,client,vehicle, dateRange, totalPrice, DateTimeNow, DateTimeNow, true));
         }
 
         public string CanRemove()
@@ -81,8 +88,8 @@ namespace Goalsetter.Domains
 
         private static Price CalculateTotalPrice(Price rentalPrice, DateRange dateRange)
         {
-            _ = rentalPrice ?? throw new ArgumentNullException(nameof(rentalPrice));
-            _ = dateRange ?? throw new ArgumentNullException(nameof(dateRange));
+            rentalPrice = Guard.NotNull(rentalPrice);
+            dateRange = Guard.NotNull(dateRange);
 
             return (Price)(dateRange.Days * rentalPrice);
         }
