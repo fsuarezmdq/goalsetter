@@ -15,21 +15,14 @@ namespace Goalsetter.Tests.Domains
     [TestClass]
     public class RentalTest : TestsBase
     {
-        private static Client _testClient;
         private static Client _testInactiveClient;
-        private static Vehicle _testVehicle;
         private static Vehicle _testInactiveVehicle;
-        private static DateRange _testDateRange;
 
         public RentalTest()
         : base (new DbContextOptionsBuilder<AppContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options)
         {
-            _testClient = Client.Create((ClientName)"FakeClient", (Email)"FakeMail@mail.com").Value;
-            _testVehicle = Vehicle.Create((VehicleMakes) "Ford", (VehicleModel) "Fiesta", 2000, (Price) 50).Value;
-            _testDateRange = DateRange.Create(DateTime.MinValue, DateTime.MaxValue).Value;
-
             _testInactiveVehicle = Vehicle.Create((VehicleMakes)"Ford", (VehicleModel)"Fiesta", 2000, (Price)50).Value;
             _testInactiveVehicle.Remove();
             _testInactiveClient = Client.Create((ClientName)"FakeClient", (Email)"FakeMail@mail.com").Value;
@@ -47,11 +40,11 @@ namespace Goalsetter.Tests.Domains
             {
                 yield return new object[] { Guid.NewGuid(), null, null, null, default, default, null, default,
                     $"Value cannot be null. (Parameter '{typeof(Client).FullName}')" };
-                yield return new object[] { Guid.NewGuid(), _testClient, null, null, default, default, null, default,
+                yield return new object[] { Guid.NewGuid(), MockedData.Client, null, null, default, default, null, default,
                     $"Value cannot be null. (Parameter '{typeof(Vehicle).FullName}')" };
-                yield return new object[] { Guid.NewGuid(), _testClient, _testVehicle, null, default, default, null, default,
+                yield return new object[] { Guid.NewGuid(), MockedData.Client, MockedData.Vehicle, null, default, default, null, default,
                     $"Value cannot be null. (Parameter '{typeof(DateRange).FullName}')" };
-                yield return new object[] { Guid.NewGuid(), _testClient, _testVehicle, _testDateRange, default, default, null, default,
+                yield return new object[] { Guid.NewGuid(), MockedData.Client, MockedData.Vehicle, MockedData.DateRange, default, default, null, default,
                     $"Value cannot be null. (Parameter '{typeof(Price).FullName}')" };
             }
         }
@@ -75,9 +68,9 @@ namespace Goalsetter.Tests.Domains
             {
                 yield return new object[] { Guid.Empty, null, null, null, default, default, null, default,
                     $"Value cannot be default. (Parameter '{typeof(Guid).FullName}')" };
-                yield return new object[] { Guid.NewGuid(), _testClient, _testVehicle, _testDateRange, default, default, (Price)50, default,
+                yield return new object[] { Guid.NewGuid(), MockedData.Client, MockedData.Vehicle, MockedData.DateRange, default, default, (Price)50, default,
                     $"Value cannot be default. (Parameter '{typeof(DateTime).FullName}')" };
-                yield return new object[] { Guid.NewGuid(), _testClient, _testVehicle, _testDateRange, DateTime.UtcNow, default, (Price)50, default,
+                yield return new object[] { Guid.NewGuid(), MockedData.Client, MockedData.Vehicle, MockedData.DateRange, DateTime.UtcNow, default, (Price)50, default,
                     $"Value cannot be default. (Parameter '{typeof(DateTime).FullName}')" };
             }
         }
@@ -99,11 +92,11 @@ namespace Goalsetter.Tests.Domains
             {
                 yield return new object[] { Guid.Empty, null, null, null, false , "Client is required value." };
                 yield return new object[] { Guid.Empty, _testInactiveClient, null, null, false, "Client should be active to create a rental." };
-                yield return new object[] { Guid.Empty, _testClient, null, null, false, "Vehicle is required value." };
-                yield return new object[] { Guid.Empty, _testClient, _testInactiveVehicle, null, false, "Vehicle should be active to create a rental." };
-                yield return new object[] { Guid.Empty, _testClient, _testVehicle, null, false, "Date Range is required value." };
-                yield return new object[] { Guid.Empty, _testClient, _testVehicle, _testDateRange, true, string.Empty };
-                yield return new object[] { Guid.NewGuid(), _testClient, _testVehicle, _testDateRange, true, string.Empty };
+                yield return new object[] { Guid.Empty, MockedData.Client, null, null, false, "Vehicle is required value." };
+                yield return new object[] { Guid.Empty, MockedData.Client, _testInactiveVehicle, null, false, "Vehicle should be active to create a rental." };
+                yield return new object[] { Guid.Empty, MockedData.Client, MockedData.Vehicle, null, false, "Date Range is required value." };
+                yield return new object[] { Guid.Empty, MockedData.Client, MockedData.VehicleTwo, MockedData.DateRange, true, string.Empty };
+                yield return new object[] { Guid.NewGuid(), MockedData.Client, MockedData.VehicleTwo, MockedData.DateRange, true, string.Empty };
             }
         }
 
@@ -148,6 +141,8 @@ namespace Goalsetter.Tests.Domains
 
                 Assert.IsTrue(rental.IsFailure);
                 Assert.AreEqual("The Vehicle is not available in that period of time.", rental.Error);
+
+                unitOWork.Dispose();
         }
 
         [TestMethod]

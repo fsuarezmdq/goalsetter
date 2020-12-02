@@ -1,8 +1,8 @@
-﻿using Goalsetter.Domains;
+﻿using System;
+using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
-using System;
 
-namespace Goalsetter.Tests
+namespace Goalsetter.Tests.Domains
 {
     public static class MockedData
     {
@@ -11,16 +11,9 @@ namespace Goalsetter.Tests
 
         public static Vehicle Vehicle =
             Vehicle.Create((VehicleMakes) "Ford", (VehicleModel) "F-100", 2012, (Price) 80).Value;
-
-        public static Vehicle VehicleRemoved
-        {
-            get
-            {
-                var vehicle = Vehicle.Create((VehicleMakes) "Ford", (VehicleModel) "F-100", 2012, (Price) 80).Value;
-                vehicle.Remove();
-                return vehicle;
-            }
-        }
+        
+        public static Vehicle VehicleTwo =
+            Vehicle.Create((VehicleMakes)"Chevrolet", (VehicleModel)"Cruze", 2012, (Price)200).Value;
 
         public static DateRange DateRange = DateRange.Create(new DateTime(2020,1,1), new DateTime(2020,1,15)).Value;
 
@@ -34,7 +27,7 @@ namespace Goalsetter.Tests
             Vehicle.Create((VehicleMakes) "Chevrolet", (VehicleModel) "Cruze", 2020, (Price) 80).Value,
         };
 
-        public static Rental[] RentalItems = new Rental[]
+        public static Rental[] RentalItems = 
         {
             Rental
         };
