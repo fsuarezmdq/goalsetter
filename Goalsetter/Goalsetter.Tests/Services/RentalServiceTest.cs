@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using CSharpFunctionalExtensions;
 using Goalsetter.AppServices;
 using Goalsetter.AppServices.Dtos;
 using Goalsetter.AppServices.Rentals;
@@ -12,8 +13,8 @@ namespace Goalsetter.Tests.Services
     [TestClass]
     public class RentalServiceTest
     {
-        private static IRentalService _rentalService;
-        private Mock<IMessages> _mockMessages;
+        private readonly Mock<IMessages> _mockMessages;
+        private readonly IRentalService _rentalService;
         public RentalServiceTest()
         { 
             _mockMessages = new Mock<IMessages>();
@@ -25,6 +26,13 @@ namespace Goalsetter.Tests.Services
         public async Task AddRentalAsync()
         {
             var result = await _rentalService.AddRentalAsync(new NewRentalDto());
+            Assert.AreEqual(Result.Success(), result);
+        }
+
+        [TestMethod]
+        public async Task RemoveRentalAsync()
+        {
+            var result = await _rentalService.RemoveRentalAsync(Guid.NewGuid());
             Assert.AreEqual(Result.Success(), result);
         }
     }

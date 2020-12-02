@@ -26,8 +26,7 @@ namespace Goalsetter.AppServices.Rentals
             StartDate = startDate;
             EndDate = endDate;
         }
-
-        internal sealed class AddRentalCommandHandler : ICommandHandler<AddRentalCommand>
+        public sealed class AddRentalCommandHandler : ICommandHandler<AddRentalCommand>
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly IRentalRepository _rentalRepository;
