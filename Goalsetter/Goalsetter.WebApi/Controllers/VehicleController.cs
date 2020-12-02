@@ -13,9 +13,9 @@ namespace Goalsetter.WebApi.Controllers
     [Route("[controller]")]
     public class VehicleController: BaseController
     {
-        private readonly Messages _messages;        
+        private readonly IMessages _messages;        
 
-        public VehicleController(Messages messages)
+        public VehicleController(IMessages messages)
         {
             _messages = messages;
         }

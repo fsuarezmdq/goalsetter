@@ -10,11 +10,11 @@ namespace Goalsetter.AppServices.Rentals
 {
     public class RentalService : IRentalService
     {
-        private readonly Messages _messages;
+        private readonly IMessages _messages;
 
-        public RentalService(Messages messages)
+        public RentalService(IMessages messages)
         {
-            _messages = messages ?? throw new ArgumentException(nameof(Messages));
+            _messages = messages ?? throw new ArgumentException(nameof(IMessages));
         }
         public async Task<Result> AddRentalAsync(NewRentalDto dto)
         {
@@ -26,7 +26,8 @@ namespace Goalsetter.AppServices.Rentals
 
         public async Task<Result> RemoveRentalAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var command = new RemoveRentalCommand(id);
+            return await _messages.Dispatch(command);
         }
     }
 }

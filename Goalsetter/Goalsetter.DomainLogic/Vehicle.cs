@@ -27,9 +27,7 @@ namespace Goalsetter.Domains
         {
 
         }
-        /// <summary>
         
-        /// </summary>
         public Vehicle(Guid id, VehicleMakes makes, VehicleModel model, int year, VehiclePrice rentalPrice ,DateTime createdDate,
             DateTime updatedDate, bool isActive)
         {
@@ -45,7 +43,7 @@ namespace Goalsetter.Domains
 
         public static Result<Vehicle> Create(VehicleMakes makes, VehicleModel model, int year, Price price, Guid id = default) 
         {
-            var canCreate = CommonCreateValidations(makes,model,year, id, out var guid);
+            var canCreate = CreateValidations(makes,model,year, id, out var guid);
 
             if(canCreate != string.Empty)
                return Result.Failure<Vehicle>(canCreate);
@@ -60,17 +58,7 @@ namespace Goalsetter.Domains
             return Result.Success(new Vehicle(guid, makes,model,year, vehiclePrice.Value, DateTimeNow, DateTimeNow,true));
         }
 
-        //public static Result<Vehicle> SeedCreate(VehicleMakes makes, VehicleModel model, int year, Guid id = default)
-        //{
-        //    var canCreate = CommonCreateValidations(makes, model,year,id, out var guid);
-
-        //    if (canCreate != string.Empty)
-        //        return Result.Failure<Vehicle>(canCreate);
-
-        //    return Result.Success(new Vehicle(guid, makes, model, year, null, DateTimeNow, DateTimeNow, true));
-        //}
-
-        private static string CommonCreateValidations(VehicleMakes makes, VehicleModel model, int year, Guid id, out Guid guid)
+        private static string CreateValidations(VehicleMakes makes, VehicleModel model, int year, Guid id, out Guid guid)
         {
             var output = string.Empty;
 

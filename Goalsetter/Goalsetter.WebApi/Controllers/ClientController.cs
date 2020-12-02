@@ -12,9 +12,9 @@ namespace Goalsetter.WebApi.Controllers
     [Route("[controller]")]
     public class ClientController: BaseController
     {
-        private readonly Messages _messages;        
+        private readonly IMessages _messages;        
 
-        public ClientController(Messages messages)
+        public ClientController(IMessages messages)
         {
             _messages = messages;
         }

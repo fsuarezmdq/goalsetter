@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AppContext = Goalsetter.DataAccess.AppContext;
 
 namespace Goalsetter.Tests
@@ -136,7 +137,7 @@ namespace Goalsetter.Tests
         }
 
         [TestMethod]
-        public async System.Threading.Tasks.Task RentalCreate_WithRentedVehicleAsync()
+        public async Task RentalCreate_WithRentedVehicleAsync()
         {
                 var unitOWork = new UnitOfWork(AppContext);
                 var vehicleRepository = new VehicleRepository(unitOWork);

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Goalsetter.AppServices
 {
-    public sealed class Messages
+    public sealed class Messages : IMessages
     {
         private readonly IServiceProvider _provider;
 

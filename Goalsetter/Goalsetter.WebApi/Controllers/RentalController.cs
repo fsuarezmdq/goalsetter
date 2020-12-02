@@ -20,15 +20,6 @@ namespace Goalsetter.WebApi.Controllers
             _rentalService = rentalService;
         }
 
-
-        //[HttpGet]
-        //public async Task<IActionResult> GetListAsync()
-        //{
-        //    var result = await _messages.Dispatch(new GetRentalListAsyncQuery());
-
-        //    return Ok(result);
-        //}
-
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] NewRentalDto dto)
         {
@@ -38,12 +29,13 @@ namespace Goalsetter.WebApi.Controllers
             );
         }
 
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> Remove(Guid id)
-        //{
-        //    Result result = await _messages.Dispatch(new RemoveRentalCommand(id));
-
-        //    return FromResult(result);
-        //}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Remove(Guid id)
+        {
+            return FromResult
+            (
+                await _rentalService.RemoveRentalAsync(id)
+            );
+        }
     }
 }
