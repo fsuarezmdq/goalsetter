@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using Goalsetter.AppServices;
 using Goalsetter.AppServices.Clients;
 using Goalsetter.AppServices.Dtos;
+using Goalsetter.AppServices.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

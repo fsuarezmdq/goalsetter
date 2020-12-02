@@ -1,5 +1,4 @@
-﻿using System;
-using Goalsetter.Domains;
+﻿using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

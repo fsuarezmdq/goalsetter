@@ -3,12 +3,9 @@ using Goalsetter.AppServices.Utils;
 using Goalsetter.DataAccess;
 using Goalsetter.DataAccess.Repositories;
 using Goalsetter.Domains;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Goalsetter.Domains.ValueObjects;
+using System;
+using System.Threading.Tasks;
 
 namespace Goalsetter.AppServices.Rentals
 {

@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Goalsetter.AppServices.Dtos;
+using Goalsetter.AppServices.Utils;
+using Goalsetter.DataAccess.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Goalsetter.AppServices.Dtos;
-using Goalsetter.AppServices.Utils;
-using Goalsetter.DataAccess;
-using Goalsetter.DataAccess.Repositories;
 
 namespace Goalsetter.AppServices.Clients
 {

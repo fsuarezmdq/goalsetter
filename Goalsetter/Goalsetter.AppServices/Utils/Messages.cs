@@ -1,11 +1,8 @@
-﻿using CSharpFunctionalExtensions;
-using Goalsetter.AppServices.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 
-namespace Goalsetter.AppServices
+namespace Goalsetter.AppServices.Utils
 {
     public sealed class Messages : IMessages
     {
@@ -23,7 +20,7 @@ namespace Goalsetter.AppServices
             Type handlerType = type.MakeGenericType(typeArgs);
 
             dynamic handler = _provider.GetService(handlerType);
-            Task<Result> result = handler.Handle((dynamic)command);
+            Task<Result> result = handler?.Handle((dynamic)command);
 
             return result;
         }

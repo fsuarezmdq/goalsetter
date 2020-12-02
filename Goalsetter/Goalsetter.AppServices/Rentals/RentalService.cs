@@ -1,9 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using Goalsetter.AppServices.Dtos;
+using Goalsetter.AppServices.Utils;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Goalsetter.AppServices.Rentals

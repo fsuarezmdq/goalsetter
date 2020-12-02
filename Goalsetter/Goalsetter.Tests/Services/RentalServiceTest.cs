@@ -1,11 +1,10 @@
-﻿using System;
-using CSharpFunctionalExtensions;
-using Goalsetter.AppServices;
+﻿using CSharpFunctionalExtensions;
 using Goalsetter.AppServices.Dtos;
 using Goalsetter.AppServices.Rentals;
 using Goalsetter.AppServices.Utils;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Threading.Tasks;
 
 namespace Goalsetter.Tests.Services

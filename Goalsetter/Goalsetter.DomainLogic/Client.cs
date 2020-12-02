@@ -1,11 +1,9 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
+using Goalsetter.Domains.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
-using Goalsetter.Domains.ValueObjects;
 
 namespace Goalsetter.Domains
 {

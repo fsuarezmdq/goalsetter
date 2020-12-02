@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 using Goalsetter.DataAccess;
 using Goalsetter.DataAccess.Repositories;
@@ -5,13 +8,9 @@ using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AppContext = Goalsetter.DataAccess.AppContext;
 
-namespace Goalsetter.Tests
+namespace Goalsetter.Tests.Domains
 {
     [TestClass]
     public class RentalTest : TestsBase

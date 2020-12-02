@@ -1,13 +1,8 @@
-﻿using Goalsetter.Domains;
+﻿using Goalsetter.DataAccess.EntityConfiguration;
+using Goalsetter.Domains;
+using Goalsetter.Domains.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Goalsetter.DataAccess.EntityConfiguration;
-using Goalsetter.Domains.ValueObjects;
-using Microsoft.Extensions.Configuration;
 
 namespace Goalsetter.DataAccess
 {

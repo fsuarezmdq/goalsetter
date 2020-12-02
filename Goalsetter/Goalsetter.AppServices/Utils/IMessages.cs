@@ -1,8 +1,7 @@
-﻿using CSharpFunctionalExtensions;
-using Goalsetter.AppServices.Utils;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 
-namespace Goalsetter.AppServices
+namespace Goalsetter.AppServices.Utils
 {
     public interface IMessages
     {

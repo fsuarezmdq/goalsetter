@@ -1,8 +1,5 @@
-﻿using CSharpFunctionalExtensions;
-using Goalsetter.AppServices;
-using Goalsetter.AppServices.Dtos;
+﻿using Goalsetter.AppServices.Dtos;
 using Goalsetter.AppServices.Rentals;
-using Goalsetter.DataAccess;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;

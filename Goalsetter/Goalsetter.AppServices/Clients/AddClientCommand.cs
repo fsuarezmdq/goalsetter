@@ -4,9 +4,6 @@ using Goalsetter.DataAccess;
 using Goalsetter.DataAccess.Repositories;
 using Goalsetter.Domains;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using ValueObjects = Goalsetter.Domains.ValueObjects;
 
