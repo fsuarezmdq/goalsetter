@@ -35,8 +35,6 @@ namespace Goalsetter.Domains
             IsActive = isActive;
         }
 
-       
-
         public static Result<Rental> Create(Client client, Vehicle vehicle, DateRange dateRange, Guid id = default)
         {
             var guid = GetId(id);

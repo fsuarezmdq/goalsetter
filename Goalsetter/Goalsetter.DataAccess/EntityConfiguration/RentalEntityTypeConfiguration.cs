@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Goalsetter.DataAccess.EntityConfiguration
 {
-    internal class RentalEntityTypeConfiguration : IEntityTypeConfiguration<Rental>
+    public class RentalEntityTypeConfiguration : IEntityTypeConfiguration<Rental>
     {
         public void Configure(EntityTypeBuilder<Rental> builder)
         {

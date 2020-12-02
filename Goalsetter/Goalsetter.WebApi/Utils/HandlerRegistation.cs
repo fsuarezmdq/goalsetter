@@ -14,7 +14,7 @@ namespace Goalsetter.WebApi.Utils
         public static void AddHandlers(this IServiceCollection services)
         {
             List<Type> handlerTypes = typeof(ICommand).Assembly.GetTypes()
-                .Where(x => x.GetInterfaces().Any(y => IsHandlerInterface(y)))
+                .Where(x => x.GetInterfaces().Any(IsHandlerInterface))
                 .Where(x => x.Name.EndsWith("Handler"))
                 .ToList();
 

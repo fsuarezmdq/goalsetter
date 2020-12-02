@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Goalsetter.DataAccess.EntityConfiguration
 {
-    internal class VehiclePriceEntityTypeConfiguration : IEntityTypeConfiguration<VehiclePrice>
+    public class VehiclePriceEntityTypeConfiguration : IEntityTypeConfiguration<VehiclePrice>
     {
         public void Configure(EntityTypeBuilder<VehiclePrice> builder)
         {

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Goalsetter.DataAccess.EntityConfiguration
 {
-    internal class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
+    public class ClientEntityTypeConfiguration : IEntityTypeConfiguration<Client>
     {
         public void Configure(EntityTypeBuilder<Client> builder)
         {

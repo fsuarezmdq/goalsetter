@@ -18,14 +18,14 @@ namespace Goalsetter.DataAccess.Repositories
 
         public async Task<Client> GetByIdAsync(Guid guid)
         {
-            return await _unitOfWork.GetAsync<Client>(guid)
+            return await _unitOfWork.AppContext.Set<Client>().Where(p => p.Id == guid)
                 .Include(p=> p.Rentals)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Client>> GetAsync()
         {
-            return await _unitOfWork.Query<Client>()
+            return await _unitOfWork.AppContext.Set<Client>()
                 .Where(p=> p.IsActive)
                 .AsNoTracking()
                 .ToListAsync();
@@ -33,11 +33,11 @@ namespace Goalsetter.DataAccess.Repositories
 
         public void Save(Client vehicle)
         {
-            _unitOfWork.Update(vehicle);
+            _unitOfWork.AppContext.Update(vehicle);
         }
         public void Add(Client vehicle)
         {
-            _unitOfWork.Add(vehicle);
+            _unitOfWork.AppContext.Add(vehicle);
         }    
     }
 }

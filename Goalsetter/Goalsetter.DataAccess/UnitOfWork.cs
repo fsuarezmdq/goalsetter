@@ -9,14 +9,15 @@ using System.Threading.Tasks;
 
 namespace Goalsetter.DataAccess
 {
-    public class UnitOfWork : IDisposable, IUnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
-        private readonly AppContext _dbContext;
+        public AppContext AppContext { get; }
+
         private bool _disposed;
 
         public UnitOfWork(AppContext appContext)
         {
-            _dbContext = appContext;
+            AppContext = appContext;
         }
 
         public async Task Commit()
@@ -26,28 +27,28 @@ namespace Goalsetter.DataAccess
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            await _dbContext.SaveChangesAsync();
+            await AppContext.SaveChangesAsync();
         }
 
-        public IQueryable<T> GetAsync<T>(Guid guid) where T : AggregateRoot
-        {
-            return _dbContext.Set<T>().Where(p => p.Id == guid);
-        }
+        //public IQueryable<T> GetAsync<T>(Guid guid) where T : AggregateRoot
+        //{
+        //    return AppContext.Set<T>().Where(p => p.Id == guid);
+        //}
 
-        public void Update<T>(T entity)
-        {
-            _dbContext.Update(entity);
-        }
+        //public void Update<T>(T entity)
+        //{
+        //    AppContext.Update(entity);
+        //}
 
-        public void Add<T>(T entity)
-        {
-            _dbContext.Add(entity);
-        }
+        //public void Add<T>(T entity)
+        //{
+        //    AppContext.Add(entity);
+        //}
 
-        public IQueryable<T> Query<T>() where T : AggregateRoot
-        {
-            return _dbContext.Set<T>();
-        }
+        //public IQueryable<T> Query<T>() where T : AggregateRoot
+        //{
+        //    return AppContext.Set<T>();
+        //}
 
         protected virtual void Dispose(bool disposing)
         {
@@ -55,7 +56,7 @@ namespace Goalsetter.DataAccess
             {
                 if (disposing)
                 {
-                    _dbContext.Dispose();
+                    AppContext.Dispose();
                 }
 
                 _disposed = true;

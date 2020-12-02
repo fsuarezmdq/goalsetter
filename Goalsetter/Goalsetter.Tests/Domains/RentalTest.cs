@@ -1,23 +1,30 @@
-using System;
-using System.Collections.Generic;
 using CSharpFunctionalExtensions;
 using Goalsetter.DataAccess;
 using Goalsetter.DataAccess.Repositories;
 using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using AppContext = Goalsetter.DataAccess.AppContext;
 
 namespace Goalsetter.Tests
 {
     [TestClass]
-    public class RentalTest
+    public class RentalTest : TestsBase
     {
         private static Client _testClient;
         private static Client _testInactiveClient;
         private static Vehicle _testVehicle;
         private static Vehicle _testInactiveVehicle;
         private static DateRange _testDateRange;
+
         public RentalTest()
+        : base (new DbContextOptionsBuilder<AppContext>()
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .Options)
         {
             _testClient = Client.Create((ClientName)"FakeClient", (Email)"FakeMail@mail.com").Value;
             _testVehicle = Vehicle.Create((VehicleMakes) "Ford", (VehicleModel) "Fiesta", 2000, (Price) 50).Value;
@@ -27,6 +34,10 @@ namespace Goalsetter.Tests
             _testInactiveVehicle.Remove();
             _testInactiveClient = Client.Create((ClientName)"FakeClient", (Email)"FakeMail@mail.com").Value;
             _testInactiveClient.Remove();
+
+            InsertEntities(MockedData.RentalItems);
+            InsertEntities(MockedData.VehicleItems);
+            SaveChanges();
         }
         
 
@@ -125,20 +136,42 @@ namespace Goalsetter.Tests
         }
 
         [TestMethod]
-        public void RentalCreate_WithRentedVehicle()
+        public async System.Threading.Tasks.Task RentalCreate_WithRentedVehicleAsync()
         {
-        //    var dataContext = new AppContext();
-        //    var unitOfWork = new UnitOfWork();
-        //    var vehicleRepository = new VehicleRepository();
+                var unitOWork = new UnitOfWork(AppContext);
+                var vehicleRepository = new VehicleRepository(unitOWork);
+                var vehicle = await vehicleRepository.GetByIdAsync(MockedData.Vehicle.Id);
 
-            //var vehicle = Vehicle.Create((VehicleMakes)"Ford", (VehicleModel)"Fiesta", 2000, (Price)50).Value;
+                var dateRange = DateRange.Create(new DateTime(2020, 1, 1), new DateTime(2020, 1, 2)).Value;
 
-            //Result<Rental> rental1 = Rental.Create(_testClient, vehicle, _testDateRange);
-            //Result<Rental> rental2 = Rental.Create(_testClient, rental1.Value.Vehicle, _testDateRange);
+                Result<Rental> rental = Rental.Create(MockedData.Client, vehicle, dateRange);
 
-            //Assert.IsTrue(rental2.IsFailure);
-            //Assert.AreEqual("expectedMessage", rental2.Error);
+                Assert.IsTrue(rental.IsFailure);
+                Assert.AreEqual("The Vehicle is not available in that period of time.", rental.Error);
         }
 
+        [TestMethod]
+        public void RentalRemove()
+        {
+            var dateRange = DateRange.Create(new DateTime(2000, 1, 1), new DateTime(2000, 1, 2)).Value;
+            var rental = Rental.Create(MockedData.Client, MockedData.Vehicle, dateRange).Value;
+
+            rental.Remove();
+            Assert.IsFalse(rental.IsActive);
+        }
+
+        [TestMethod]
+        public void RentalCanRemove()
+        {
+            var dateRange = DateRange.Create(new DateTime(2000, 1, 1), new DateTime(2000, 1, 2)).Value;
+            var rental = Rental.Create(MockedData.Client, MockedData.Vehicle, dateRange).Value;
+
+            var canRemoveActive = rental.CanRemove();
+            rental.Remove();
+            var canRemoveRemoved = rental.CanRemove();
+
+            Assert.AreEqual(string.Empty, canRemoveActive);
+            Assert.AreEqual("The Rental is already removed.", canRemoveRemoved);
+        }
     }
 }

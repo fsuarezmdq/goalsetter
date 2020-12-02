@@ -18,7 +18,7 @@ namespace Goalsetter.DataAccess.Repositories
 
         public async Task<Rental> GetByIdAsync(Guid guid)
         {
-            return await _unitOfWork.GetAsync<Rental>(guid)
+            return await _unitOfWork.AppContext.Set<Rental>().Where(p => p.Id == guid)
                 .Include(p => p.Vehicle)
                     .ThenInclude(p=> p.Rentals)
                 .FirstOrDefaultAsync();
@@ -26,7 +26,7 @@ namespace Goalsetter.DataAccess.Repositories
 
         public async Task<IEnumerable<Rental>> GetAsync()
         {
-            return await _unitOfWork.Query<Rental>()
+            return await _unitOfWork.AppContext.Set<Rental>()
                 .Include(p=> p.Vehicle)
                     .ThenInclude(p=> p.RentalPrice)
                 .Include(p => p.Client)
@@ -37,11 +37,11 @@ namespace Goalsetter.DataAccess.Repositories
 
         public void Save(Rental rental)
         {
-            _unitOfWork.Update(rental);
+            _unitOfWork.AppContext.Update(rental);
         }
         public void Add(Rental rental)
         {
-            _unitOfWork.Add(rental);
+            _unitOfWork.AppContext.Add(rental);
         }    
     }
 }

@@ -37,12 +37,17 @@ namespace Goalsetter.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            ApplyBuilderConfiguration(modelBuilder);
+
+            AddSeedData(modelBuilder);
+        }
+
+        public static void ApplyBuilderConfiguration(ModelBuilder modelBuilder)
+        {
             modelBuilder.ApplyConfiguration(new VehicleEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ClientEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new VehiclePriceEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new RentalEntityTypeConfiguration());
-
-            AddSeedData(modelBuilder);
         }
 
         private static void AddSeedData(ModelBuilder modelBuilder)
