@@ -20,7 +20,7 @@ namespace Goalsetter.DataAccess.EntityConfiguration
             builder.Property(p => p.Model)
                 .HasMaxLength(VehicleModel.MaxLength)
                 .IsRequired()
-                .HasConversion(p => p.Value, p => VehicleModel.Create(p).Value); ;
+                .HasConversion(p => p.Value, p => VehicleModel.Create(p).Value);
             builder.Property(p => p.Year)
                 .IsRequired();
             builder.Property(p => p.CreatedDate)

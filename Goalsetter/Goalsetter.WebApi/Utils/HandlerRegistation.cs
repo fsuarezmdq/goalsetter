@@ -28,12 +28,12 @@ namespace Goalsetter.WebApi.Utils
             object[] attributes = type.GetCustomAttributes(false);
 
             List<Type> pipeline = attributes
-                .Select(x => ToDecorator(x))
+                .Select(ToDecorator)
                 .Concat(new[] { type })
                 .Reverse()
                 .ToList();
 
-            Type interfaceType = type.GetInterfaces().Single(y => IsHandlerInterface(y));
+            Type interfaceType = type.GetInterfaces().Single(IsHandlerInterface);
             Func<IServiceProvider, object> factory = BuildPipeline(pipeline, interfaceType);
 
             services.AddTransient(interfaceType, factory);
@@ -57,7 +57,7 @@ namespace Goalsetter.WebApi.Utils
                 {
                     List<ParameterInfo> parameterInfos = ctor.GetParameters().ToList();
 
-                    object[] parameters = GetParameters(parameterInfos, current, provider);
+                    var parameters = GetParameters(parameterInfos, current, provider);
 
                     current = ctor.Invoke(parameters);
                 }
@@ -72,7 +72,7 @@ namespace Goalsetter.WebApi.Utils
         {
             var result = new object[parameterInfos.Count];
 
-            for (int i = 0; i < parameterInfos.Count; i++)
+            for (var i = 0; i < parameterInfos.Count; i++)
             {
                 result[i] = GetParameter(parameterInfos[i], current, provider);
             }

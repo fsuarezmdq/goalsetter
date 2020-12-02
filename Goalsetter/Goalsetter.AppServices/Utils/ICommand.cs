@@ -7,7 +7,7 @@ namespace Goalsetter.AppServices.Utils
     {
     }
 
-    public interface ICommandHandler<TCommand>
+    public interface ICommandHandler<in TCommand>
         where TCommand : ICommand
     {
         Task<Result> Handle(TCommand command);

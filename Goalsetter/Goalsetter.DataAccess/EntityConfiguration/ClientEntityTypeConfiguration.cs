@@ -18,7 +18,7 @@ namespace Goalsetter.DataAccess.EntityConfiguration
             builder.Property(p => p.Email)
                 .HasMaxLength(Email.MaxLength)
                 .IsRequired()
-                .HasConversion(p => p.Value, p => Email.Create(p).Value); ;
+                .HasConversion(p => p.Value, p => Email.Create(p).Value);
             builder.Property(p => p.CreatedDate)
                 .IsRequired()
                 .HasDefaultValueSql("GetUtcDate()");

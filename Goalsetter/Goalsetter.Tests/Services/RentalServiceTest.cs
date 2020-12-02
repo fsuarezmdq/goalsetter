@@ -17,8 +17,9 @@ namespace Goalsetter.Tests.Services
         public RentalServiceTest()
         { 
             _mockMessages = new Mock<IMessages>();
-            _rentalService = new RentalService(_mockMessages.Object);
             _mockMessages.Setup(p => p.Dispatch(It.IsAny<ICommand>())).ReturnsAsync(Result.Success);
+
+            _rentalService = new RentalService(_mockMessages.Object);
         }
 
         [TestMethod]

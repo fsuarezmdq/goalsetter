@@ -7,7 +7,7 @@ namespace Goalsetter.Domains.Utils
 
         public static T NotDefault<T>(T obj) where T : struct
         {
-            return (object.Equals(obj, default(T))) ? throw new ArgumentException($"Value cannot be default. (Parameter '{typeof(T).FullName}')") : obj;
+            return (Equals(obj, default(T))) ? throw new ArgumentException($"Value cannot be default. (Parameter '{typeof(T).FullName}')") : obj;
         }
 
         public static T NotNull<T>(T obj) where T : class

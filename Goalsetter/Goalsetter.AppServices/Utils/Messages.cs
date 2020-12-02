@@ -32,7 +32,7 @@ namespace Goalsetter.AppServices.Utils
             Type handlerType = type.MakeGenericType(typeArgs);
 
             dynamic handler = _provider.GetService(handlerType);
-            T result = handler.Handle((dynamic)query);
+            T result = handler?.Handle((dynamic)query);
 
             return result;
         }
