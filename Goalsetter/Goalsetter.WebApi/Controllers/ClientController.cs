@@ -12,38 +12,39 @@ namespace Goalsetter.WebApi.Controllers
     [Route("[controller]")]
     public class ClientController: BaseController
     {
-        private readonly IMessages _messages;        
+        private readonly IClientService _clientService;        
 
-        public ClientController(IMessages messages)
+        public ClientController(IClientService clientService)
         {
-            _messages = messages;
+            _clientService = clientService;
         }
 
 
         [HttpGet]
         public async Task<IActionResult> GetListAsync()
         {
-            var result = await _messages.Dispatch(new GetClientListAsyncQuery());
-
-            return Ok(result);
+            return Ok
+            (
+                await _clientService.GetAsync()
+            );
         }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] NewClientDto dto)
         {
-            var command = new AddClientCommand(dto.Name,dto.Email);
-
-            Result result = await _messages.Dispatch(command);
-
-            return FromResult(result);
+            return FromResult
+            (
+                await _clientService.AddClientAsync(dto)
+            );
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(Guid id)
         {
-            Result result = await _messages.Dispatch(new RemoveClientCommand(id));
-
-            return FromResult(result);
+            return FromResult
+            (
+                await _clientService.RemoveClientAsync(id)
+            );
         }
     }
 }

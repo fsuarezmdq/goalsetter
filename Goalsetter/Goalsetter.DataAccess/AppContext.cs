@@ -13,22 +13,14 @@ namespace Goalsetter.DataAccess
         public DbSet<VehiclePrice> VehiclePrices { get; set; }
         public DbSet<Rental> Rentals { get; set; }
 
-        public AppContext()//(IConfiguration configuration)
+        public AppContext()
         {
-            //_configuration = configuration;
         }
         public AppContext(DbContextOptions<AppContext> options)
         : base(options)
         {
             
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    //optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;Initial " +
-        //    //    "Catalog=VEHICLE_RENTAL_DEV;Integrated Security=True",
-        //    //  x => x.MigrationsAssembly("Goalsetter.DataAccess"));
-        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

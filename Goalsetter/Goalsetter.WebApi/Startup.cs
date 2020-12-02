@@ -1,5 +1,7 @@
+using Goalsetter.AppServices.Clients;
 using Goalsetter.AppServices.Rentals;
 using Goalsetter.AppServices.Utils;
+using Goalsetter.AppServices.Vehicles;
 using Goalsetter.DataAccess;
 using Goalsetter.DataAccess.Extensions;
 using Goalsetter.DataAccess.Repositories;
@@ -38,7 +40,9 @@ namespace Goalsetter.WebApi
             );
 
             services.AddSingleton<IMessages,Messages>();
-            services.AddSingleton<IRentalService, RentalService>();
+            services.AddScoped<IRentalService, RentalService>();
+            services.AddScoped<IVehicleService, VehicleService>();
+            services.AddScoped<IClientService, ClientService>();
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 

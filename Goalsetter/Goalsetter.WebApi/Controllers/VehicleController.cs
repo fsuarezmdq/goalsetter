@@ -12,38 +12,39 @@ namespace Goalsetter.WebApi.Controllers
     [Route("[controller]")]
     public class VehicleController: BaseController
     {
-        private readonly IMessages _messages;        
+        private readonly IVehicleService _vehicleService;        
 
-        public VehicleController(IMessages messages)
+        public VehicleController(IVehicleService vehicleService)
         {
-            _messages = messages;
+            _vehicleService = vehicleService;
         }
 
 
         [HttpGet]
         public async Task<IActionResult> GetListAsync()
         {
-            var result = await _messages.Dispatch(new GetVehicleListAsyncQuery());
-
-            return Ok(result);
+            return Ok
+            (
+                await _vehicleService.GetAsync()
+            );
         }
 
         [HttpPost]
         public async Task<IActionResult> Add([FromBody] NewVehicleDto dto)
         {
-            var command = new AddVehicleCommand(dto.Makes,dto.Model,dto.Year,dto.RentalPrice);
-
-            Result result = await _messages.Dispatch(command);
-
-            return FromResult(result);
+            return FromResult
+            (
+                await _vehicleService.AddVehicleAsync(dto)
+            );
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remove(Guid id)
         {
-            Result result = await _messages.Dispatch(new RemoveVehicleCommand(id));
-
-            return FromResult(result);
+            return FromResult
+            (
+                await _vehicleService.RemoveVehicleAsync(id)
+            );
         }
     }
 }
