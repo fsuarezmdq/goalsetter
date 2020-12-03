@@ -21,14 +21,7 @@ namespace Goalsetter.DataAccess
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            try
-            {
-                await AppContext.SaveChangesAsync();
-            }
-            finally
-            {
-                Dispose(true);
-            }
+            await AppContext.SaveChangesAsync();
         }
 
         protected virtual void Dispose(bool disposing)
