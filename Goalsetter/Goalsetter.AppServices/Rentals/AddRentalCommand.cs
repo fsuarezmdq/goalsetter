@@ -6,6 +6,7 @@ using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
 using System;
 using System.Threading.Tasks;
+using Goalsetter.AppServices.Decorators;
 
 namespace Goalsetter.AppServices.Rentals
 {
@@ -23,6 +24,8 @@ namespace Goalsetter.AppServices.Rentals
             StartDate = startDate;
             EndDate = endDate;
         }
+
+        [DatabaseRetry]
         public sealed class AddRentalCommandHandler : ICommandHandler<AddRentalCommand>
         {
             private readonly IUnitOfWork _unitOfWork;
@@ -61,6 +64,7 @@ namespace Goalsetter.AppServices.Rentals
 
                 await _unitOfWork.Commit();
 
+                _unitOfWork.Dispose();
                 return Result.Success();
             }
         }

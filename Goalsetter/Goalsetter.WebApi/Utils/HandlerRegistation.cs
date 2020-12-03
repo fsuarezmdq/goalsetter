@@ -101,10 +101,7 @@ namespace Goalsetter.WebApi.Utils
 
             if (type == typeof(DatabaseRetryAttribute))
                 return typeof(DatabaseRetryDecorator<>);
-
-            if (type == typeof(AuditLogAttribute))
-                return typeof(AuditLoggingDecorator<>);
-
+            
             // other attributes go here
 
             throw new ArgumentException(attribute.ToString());

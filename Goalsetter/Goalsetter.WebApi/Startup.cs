@@ -39,6 +39,8 @@ namespace Goalsetter.WebApi
                 options.UseSqlServer(Configuration["ConnectionString"], x => x.MigrationsAssembly("Goalsetter.DataAccess"))
             );
 
+            
+            services.AddSingleton(new Config(3));
             services.AddSingleton<IMessages,Messages>();
             services.AddScoped<IRentalService, RentalService>();
             services.AddScoped<IVehicleService, VehicleService>();

@@ -11,7 +11,7 @@ namespace Goalsetter.AppServices.Rentals
     public sealed class RemoveRentalCommand : ICommand
     {
         public Guid Id { get; }
-
+        
         public RemoveRentalCommand(Guid id)
         {
             Id = id;
