@@ -22,12 +22,12 @@ namespace Goalsetter.DataAccess
             
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;Initial " +
-                "Catalog=VEHICLE_RENTAL_DEV;Integrated Security=True",
-              x => x.MigrationsAssembly("Goalsetter.DataAccess"));
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source=(LocalDB)\\MSSQLLocalDB;Initial " +
+        //        "Catalog=VEHICLE_RENTAL_DEV;Integrated Security=True",
+        //      x => x.MigrationsAssembly("Goalsetter.DataAccess"));
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -96,7 +96,7 @@ namespace Goalsetter.DataAccess
                         EndDate = rental.DateRange.EndDate, 
                         TotalPrice = rental.TotalPrice,
                         CreatedDate = rental.CreatedDate,
-                        UpdateDate = rental.UpdatedDate,
+                        UpdatedDate = rental.UpdatedDate,
                         IsActive = rental.IsActive
                     }
                 }

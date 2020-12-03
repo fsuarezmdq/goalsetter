@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Goalsetter.Domains.Utils;
 
 namespace Goalsetter.Domains
 {
@@ -20,11 +21,11 @@ namespace Goalsetter.Domains
         public Client(Guid id, ClientName clientName, Email email, DateTime createdDate, DateTime updatedDate,
             bool isActive)
         {
-            Id = (id == default) ? throw new ArgumentNullException(nameof(id)) : id;
-            ClientName = clientName ?? throw new ArgumentNullException(nameof(clientName));
-            Email = email ?? throw new ArgumentNullException(nameof(email));
-            CreatedDate = createdDate;
-            UpdatedDate = updatedDate;
+            Id = Guard.NotDefault(id);
+            ClientName = Guard.NotNull(clientName);
+            Email = Guard.NotNull(email);
+            CreatedDate = Guard.NotDefault(createdDate);
+            UpdatedDate = Guard.NotDefault(updatedDate);
             IsActive = isActive;
         }
 

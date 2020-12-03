@@ -59,7 +59,8 @@ namespace Goalsetter.Tests.DataAccess
             ).Value;
 
             _rentalRepository.Add(rental);
-            await _unitOfWork.Commit();
+            
+            SaveChanges();
 
             var storedRental = await _rentalRepository.GetByIdAsync(id);
 

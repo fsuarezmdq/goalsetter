@@ -88,9 +88,7 @@ namespace Goalsetter.Domains
 
         public bool Overlap(DateRange dateRange)
         {
-            _ = dateRange ?? throw new ArgumentNullException(nameof(dateRange));
-
-            return DateRange.Overlap(dateRange);
+            return DateRange.Overlap(Guard.NotNull(dateRange));
         }
     }
 }

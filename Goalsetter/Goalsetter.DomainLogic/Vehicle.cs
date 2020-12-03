@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using Goalsetter.Domains.Utils;
 
 namespace Goalsetter.Domains
 {
@@ -26,13 +27,13 @@ namespace Goalsetter.Domains
         public Vehicle(Guid id, VehicleMakes makes, VehicleModel model, int year, VehiclePrice rentalPrice ,DateTime createdDate,
             DateTime updatedDate, bool isActive)
         {
-            Id = (id == default) ? throw new ArgumentNullException(nameof(id)) : id;
-            Makes = makes ?? throw new ArgumentNullException(nameof(makes));
-            Model = model ?? throw new ArgumentNullException(nameof(model));
-            RentalPrice = rentalPrice ?? throw new ArgumentNullException(nameof(rentalPrice));
-            Year = (year == default)? throw new ArgumentException("Vehicle year default value assigned", nameof(year)) : year ;
-            CreatedDate = (createdDate == default) ? throw new ArgumentException("Create date default value assigned", nameof(createdDate)) : createdDate;
-            UpdatedDate = (updatedDate == default) ? throw new ArgumentException("Updated date default value assigned", nameof(updatedDate)) : updatedDate;
+            Id = Guard.NotDefault(id);
+            Makes = Guard.NotNull(makes);
+            Model = Guard.NotNull(model);
+            RentalPrice = Guard.NotNull(rentalPrice);
+            Year = Guard.NotDefault(year) ;
+            CreatedDate = Guard.NotDefault(createdDate);
+            UpdatedDate = Guard.NotDefault(updatedDate);
             IsActive = isActive;
         }
 
@@ -104,7 +105,7 @@ namespace Goalsetter.Domains
 
         public Result IsRentable(DateRange dateRange)
         {
-            _ = dateRange ?? throw new ArgumentNullException(nameof(dateRange));
+            dateRange = Guard.NotNull(dateRange);
 
             if (!IsActive)
                 return Result.Failure("Vehicle should be active to create a rental.");
