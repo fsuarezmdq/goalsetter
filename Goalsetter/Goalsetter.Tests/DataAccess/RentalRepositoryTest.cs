@@ -17,7 +17,6 @@ namespace Goalsetter.Tests.DataAccess
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IRentalRepository _rentalRepository;
-        //private readonly IVehicleRepository _vehicleRepository;
 
         public RentalRepositoryTest()
         : base (new DbContextOptionsBuilder<AppContext>()

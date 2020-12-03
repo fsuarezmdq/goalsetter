@@ -30,8 +30,9 @@ namespace Goalsetter.DataAccess.EntityConfiguration
                 .IsRequired()
                 .HasDefaultValueSql("GetUtcDate()");
             builder.Property(p => p.TotalPrice)
-                .HasConversion(p => p.Value, p => Price.Create(p).Value);
-
+                .HasConversion(p => p.Value, p => Price.Create(p).Value)
+                .IsRequired();
+            
             builder.Navigation("Client");
             builder.Navigation("DateRange");
             builder.Navigation("Vehicle");
