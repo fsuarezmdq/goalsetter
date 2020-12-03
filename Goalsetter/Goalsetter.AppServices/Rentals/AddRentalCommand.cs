@@ -64,7 +64,6 @@ namespace Goalsetter.AppServices.Rentals
 
                 await _unitOfWork.Commit();
 
-                _unitOfWork.Dispose();
                 return Result.Success();
             }
         }
