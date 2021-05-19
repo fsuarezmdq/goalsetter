@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Goalsetter.Domains;
 
-namespace Goalsetter.DataAccess.Repositories
+namespace Goalsetter.AppServices
 {
     public interface IClientRepository
     {

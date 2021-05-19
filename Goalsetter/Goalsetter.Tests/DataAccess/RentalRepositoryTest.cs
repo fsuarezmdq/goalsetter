@@ -1,14 +1,14 @@
-﻿using System;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using Goalsetter.AppServices;
 using Goalsetter.DataAccess;
 using Goalsetter.DataAccess.Repositories;
 using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AppContext = Goalsetter.DataAccess.AppContext;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using ApplicationContext = Goalsetter.DataAccess.ApplicationContext;
 
 namespace Goalsetter.Tests.DataAccess
 {
@@ -16,25 +16,24 @@ namespace Goalsetter.Tests.DataAccess
     public class RentalRepositoryTest : TestsBase
     {
         private readonly UnitOfWork _unitOfWork;
-        private readonly IRentalRepository _rentalRepository;
 
         public RentalRepositoryTest()
-        : base (new DbContextOptionsBuilder<AppContext>()
+        : base (new DbContextOptionsBuilder<ApplicationContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options)
         {
-            _unitOfWork = new UnitOfWork(AppContext);
-            _rentalRepository = new RentalRepository(_unitOfWork);
+            _unitOfWork = new UnitOfWork(AppContext);           
 
-            InsertEntities(MockedData.RentalItems);
-            InsertEntities(MockedData.VehicleItems);
+
+            InsertRentals(MockedData.RentalItems);
+            InsertVehicles(MockedData.VehicleItems);
             SaveChanges();
         }
         
         [TestMethod]
         public async Task GetAsync()
         {
-            var rentals =  await _rentalRepository.GetAsync();
+            var rentals =  await _unitOfWork.RentalRepository.GetAsync();
 
             Assert.IsTrue(rentals.Any());
         }
@@ -42,7 +41,7 @@ namespace Goalsetter.Tests.DataAccess
         [TestMethod]
         public async Task GetByIdAsync()
         {
-            var rental = await _rentalRepository.GetByIdAsync(MockedData.Rental.Id);
+            var rental = await _unitOfWork.RentalRepository.GetByIdAsync(MockedData.Rental.Id);
             Assert.AreEqual(MockedData.Rental.Id, rental.Id);
         }
 
@@ -58,11 +57,11 @@ namespace Goalsetter.Tests.DataAccess
                 id
             ).Value;
 
-            _rentalRepository.Add(rental);
+            _unitOfWork.RentalRepository.Add(rental);
 
-            await _unitOfWork.Commit();
+            await _unitOfWork.CommitAsync();
 
-            var storedRental = await _rentalRepository.GetByIdAsync(id);
+            var storedRental = await _unitOfWork.RentalRepository.GetByIdAsync(id);
 
             Assert.AreEqual(id, storedRental.Id);
             Assert.AreEqual(rental.Vehicle.Id, storedRental.Vehicle.Id);

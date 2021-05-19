@@ -1,25 +1,27 @@
-﻿using Goalsetter.DataAccess.EntityConfiguration;
+﻿using Goalsetter.AppServices;
+using Goalsetter.DataAccess.EntityConfiguration;
 using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Threading.Tasks;
 
 namespace Goalsetter.DataAccess
 {
-    public class AppContext : DbContext
+    public class ApplicationContext : DbContext, IApplicationContext
     {
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<VehiclePrice> VehiclePrices { get; set; }
         public DbSet<Rental> Rentals { get; set; }
 
-        public AppContext()
+        public ApplicationContext()
         {
         }
-        public AppContext(DbContextOptions<AppContext> options)
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)
         {
-            
+
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -46,20 +48,20 @@ namespace Goalsetter.DataAccess
 
         private static void AddSeedData(ModelBuilder modelBuilder)
         {
-            var vehicle = Vehicle.Create((VehicleMakes) "Chevrolet", (VehicleModel) "Cruze", 2017,(Price) 150).Value;
+            var vehicle = Vehicle.Create((VehicleMakes)"Chevrolet", (VehicleModel)"Cruze", 2017, (Price)150).Value;
             var client = Client.Create((ClientName)"José de San Martin", (Email)"jose@sanmartin.com").Value;
             var dateRange = DateRange.Create(new DateTime(2022, 1, 1), new DateTime(2022, 1, 15)).Value;
 
             //Anonymous types required to create an object without Vehicle price.
-            var vehicles = new []
+            var vehicles = new[]
             {
                 new { Id = vehicle.Id, CreatedDate = vehicle.CreatedDate, IsActive = vehicle.IsActive, Makes = vehicle.Makes,
-                    Model = vehicle.Model, UpdatedDate = vehicle.UpdatedDate, Year = vehicle.Year }, 
+                    Model = vehicle.Model, UpdatedDate = vehicle.UpdatedDate, Year = vehicle.Year },
                 new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Chevrolet",
                     Model = (VehicleModel)"Corsa", UpdatedDate = DateTime.UtcNow, Year = 2011},
-                new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Ford", 
+                new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Ford",
                     Model = (VehicleModel)"F-100", UpdatedDate = DateTime.UtcNow, Year = 2000 },
-                new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Fiat", 
+                new { Id = Guid.NewGuid(), CreatedDate = DateTime.UtcNow, IsActive = true, Makes = (VehicleMakes)"Fiat",
                     Model = (VehicleModel)"Palio", UpdatedDate = DateTime.UtcNow, Year = 2008 }
             };
 
@@ -73,7 +75,7 @@ namespace Goalsetter.DataAccess
                 VehiclePrice.Create(vehicles[3].Id, (Price)80).Value
             );
 
-            
+
             modelBuilder.Entity<Client>().HasData
             (
                 client,
@@ -85,15 +87,15 @@ namespace Goalsetter.DataAccess
             var rental = Rental.Create(client, vehicle, dateRange).Value;
             modelBuilder.Entity<Rental>().HasData
             (
-                new []
+                new[]
                 {
                     new
                     {
                         Id = rental.Id,
                         ClientId = rental.Client.Id,
-                        VehicleId = rental.Vehicle.Id, 
-                        StartDate = rental.DateRange.StartDate, 
-                        EndDate = rental.DateRange.EndDate, 
+                        VehicleId = rental.Vehicle.Id,
+                        StartDate = rental.DateRange.StartDate,
+                        EndDate = rental.DateRange.EndDate,
                         TotalPrice = rental.TotalPrice,
                         CreatedDate = rental.CreatedDate,
                         UpdatedDate = rental.UpdatedDate,
@@ -101,7 +103,7 @@ namespace Goalsetter.DataAccess
                     }
                 }
             );
-            
+
         }
     }
 }

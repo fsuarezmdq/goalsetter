@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Goalsetter.AppServices\Goalsetter.AppServices.csproj" />
+    <ProjectReference Include="..\Goalsetter.DataAccess\Goalsetter.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

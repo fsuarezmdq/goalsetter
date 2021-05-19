@@ -10,7 +10,7 @@ namespace Goalsetter.DataAccess.Extensions
         {
             using (var serviceScope = builder?.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope())
             {
-                var context = serviceScope?.ServiceProvider.GetRequiredService<AppContext>();
+                var context = serviceScope?.ServiceProvider.GetRequiredService<ApplicationContext>();
                 
                 context?.Database.Migrate();
             }

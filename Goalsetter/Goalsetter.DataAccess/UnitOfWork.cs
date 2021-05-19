@@ -1,27 +1,36 @@
-﻿using System;
+﻿using Goalsetter.AppServices;
+using Goalsetter.DataAccess.Repositories;
+using System;
 using System.Threading.Tasks;
 
 namespace Goalsetter.DataAccess
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public AppContext AppContext { get; }
+        private readonly IApplicationContext _appContext;
+        public IClientRepository ClientRepository { get; }
+        public IVehicleRepository VehicleRepository { get; }
+        public IRentalRepository RentalRepository { get; }
 
         private bool _disposed;
 
-        public UnitOfWork(AppContext appContext)
+        public UnitOfWork(IApplicationContext appContext)
         {
-            AppContext = appContext;
+            _appContext = appContext;
+
+            ClientRepository = new ClientRepository(appContext);
+            VehicleRepository = new VehicleRepository(appContext);
+            RentalRepository = new RentalRepository(appContext);
         }
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
             if (_disposed)
             {
                 throw new ObjectDisposedException(this.GetType().FullName);
             }
 
-            await AppContext.SaveChangesAsync();
+            await _appContext.SaveChangesAsync();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -30,7 +39,7 @@ namespace Goalsetter.DataAccess
             {
                 if (disposing)
                 {
-                    AppContext.Dispose();
+                    _appContext.Dispose();
                 }
 
                 _disposed = true;

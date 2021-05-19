@@ -1,4 +1,5 @@
-﻿using Goalsetter.Domains;
+﻿using Goalsetter.AppServices;
+using Goalsetter.Domains;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,17 +8,18 @@ using System.Threading.Tasks;
 
 namespace Goalsetter.DataAccess.Repositories
 {
-    public class VehicleRepository : AppContext, IVehicleRepository
+    public class VehicleRepository : IVehicleRepository
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public VehicleRepository(IUnitOfWork unitOfWork)
+        private readonly IApplicationContext _applicationContext;
+
+        public VehicleRepository(IApplicationContext applicationContext)
         {
-            _unitOfWork = unitOfWork;
+            _applicationContext = applicationContext;
         }              
 
         public async Task<Vehicle> GetByIdAsync(Guid guid)
         {
-            return await _unitOfWork.AppContext.Set<Vehicle>().Where(p => p.Id == guid)
+            return await _applicationContext.Vehicles.Where(p => p.Id == guid)
                 .Include(p => p.RentalPrice)
                 .Include(p => p.Rentals)
                 .FirstOrDefaultAsync();
@@ -25,7 +27,7 @@ namespace Goalsetter.DataAccess.Repositories
 
         public async Task<IEnumerable<Vehicle>> GetAsync()
         {
-            return await _unitOfWork.AppContext.Set<Vehicle>()
+            return await _applicationContext.Vehicles
                 .Include(p=> p.RentalPrice)
                 .Include(p=>p.Rentals)
                     .ThenInclude(p=> p.Client)
@@ -36,11 +38,11 @@ namespace Goalsetter.DataAccess.Repositories
 
         public void Save(Vehicle vehicle)
         {
-            _unitOfWork.AppContext.Update(vehicle);
+            _applicationContext.Vehicles.Update(vehicle);
         }
         public void Add(Vehicle vehicle)
         {
-            _unitOfWork.AppContext.Add(vehicle);
+            _applicationContext.Vehicles.Add(vehicle);
         }    
     }
 }

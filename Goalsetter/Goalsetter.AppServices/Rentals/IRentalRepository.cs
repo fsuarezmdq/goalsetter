@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Goalsetter.Domains;
 
-namespace Goalsetter.DataAccess.Repositories
+namespace Goalsetter.AppServices
 {
     public interface IRentalRepository
     {
         Task<IEnumerable<Rental>> GetAsync();
         Task<Rental> GetByIdAsync(Guid guid);
-        void Save(Rental vehicle);
-        void Add(Rental vehicle);
+        void Save(Rental rental);
+        void Add(Rental rental);
     }
 }

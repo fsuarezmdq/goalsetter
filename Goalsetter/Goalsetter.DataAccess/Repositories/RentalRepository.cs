@@ -1,4 +1,5 @@
-﻿using Goalsetter.Domains;
+﻿using Goalsetter.AppServices;
+using Goalsetter.Domains;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,15 +10,16 @@ namespace Goalsetter.DataAccess.Repositories
 {
     public class RentalRepository : IRentalRepository
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public RentalRepository(IUnitOfWork unitOfWork)
+        private readonly IApplicationContext _applicationContext;
+
+        public RentalRepository(IApplicationContext applicationContext)
         {
-            _unitOfWork = unitOfWork;
+            _applicationContext = applicationContext;
         }              
 
         public async Task<Rental> GetByIdAsync(Guid guid)
         {
-            return await _unitOfWork.AppContext.Set<Rental>().Where(p => p.Id == guid)
+            return await _applicationContext.Rentals.Where(p => p.Id == guid)
                 .Include(p => p.Vehicle)
                     .ThenInclude(p=> p.Rentals)
                 .FirstOrDefaultAsync();
@@ -25,7 +27,7 @@ namespace Goalsetter.DataAccess.Repositories
 
         public async Task<IEnumerable<Rental>> GetAsync()
         {
-            return await _unitOfWork.AppContext.Set<Rental>()
+            return await _applicationContext.Rentals
                 .Include(p=> p.Vehicle)
                     .ThenInclude(p=> p.RentalPrice)
                 .Include(p => p.Client)
@@ -36,11 +38,12 @@ namespace Goalsetter.DataAccess.Repositories
 
         public void Save(Rental rental)
         {
-            _unitOfWork.AppContext.Update(rental);
+            _applicationContext.Rentals.Update(rental);
         }
+
         public void Add(Rental rental)
         {
-            _unitOfWork.AppContext.Add(rental);
+            _applicationContext.Rentals.Add(rental);
         }    
     }
 }

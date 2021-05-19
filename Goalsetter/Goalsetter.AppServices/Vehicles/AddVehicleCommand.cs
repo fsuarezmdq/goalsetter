@@ -1,7 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Goalsetter.AppServices.Utils;
-using Goalsetter.DataAccess;
-using Goalsetter.DataAccess.Repositories;
 using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
 using System;
@@ -51,7 +49,7 @@ namespace Goalsetter.AppServices.Vehicles
 
                 _vehicleRepository.Add(vehicle.Value);
 
-                await _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
 
                 return Result.Success();
             }

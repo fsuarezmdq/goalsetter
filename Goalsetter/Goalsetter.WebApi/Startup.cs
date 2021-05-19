@@ -1,14 +1,9 @@
-using Goalsetter.AppServices.Clients;
-using Goalsetter.AppServices.Rentals;
-using Goalsetter.AppServices.Utils;
-using Goalsetter.AppServices.Vehicles;
-using Goalsetter.DataAccess;
+using CleanArchitecture.Application;
 using Goalsetter.DataAccess.Extensions;
-using Goalsetter.DataAccess.Repositories;
+using Goalsetter.Infrastructure;
 using Goalsetter.WebApi.Utils;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,12 +13,12 @@ namespace Goalsetter.WebApi
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -35,22 +30,9 @@ namespace Goalsetter.WebApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Goalsetter.WebApi", Version = "v1" });
             });
 
-            services.AddDbContext<AppContext>(options => 
-                options.UseSqlServer(Configuration["ConnectionString"], x => x.MigrationsAssembly("Goalsetter.DataAccess"))
-            );
+            services.AddApplication();
 
-            
-            services.AddSingleton(new Config(3));
-            services.AddSingleton<IMessages,Messages>();
-            services.AddScoped<IRentalService, RentalService>();
-            services.AddScoped<IVehicleService, VehicleService>();
-            services.AddScoped<IClientService, ClientService>();
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            services.AddScoped<IClientRepository, ClientRepository>();
-            services.AddScoped<IVehicleRepository, VehicleRepository>();
-            services.AddScoped<IRentalRepository, RentalRepository>();
+            services.AddInfrastructure(Configuration);
 
             services.AddHandlers();
         }

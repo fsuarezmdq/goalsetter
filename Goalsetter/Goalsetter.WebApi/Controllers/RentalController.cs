@@ -34,5 +34,14 @@ namespace Goalsetter.WebApi.Controllers
                 await _rentalService.RemoveRentalAsync(id)
             );
         }
+
+        [HttpGet()]
+        public async Task<IActionResult> GetRentals()
+        {
+            return Ok
+            (
+                await _rentalService.GetRentalsAsync()
+            );
+        }
     }
 }

@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goalsetter.Domains", "Goalsetter.DomainLogic\Goalsetter.Domains.csproj", "{1C94FA10-1CB4-4BDF-B029-F61C206363C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goalsetter.DataAccess", "Goalsetter.DataAccess\Goalsetter.DataAccess.csproj", "{256E8B24-6BF8-4D56-8307-DCB3F29EB570}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goalsetter.Infrastructure", "Goalsetter.DataAccess\Goalsetter.Infrastructure.csproj", "{256E8B24-6BF8-4D56-8307-DCB3F29EB570}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goalsetter.AppServices", "Goalsetter.AppServices\Goalsetter.AppServices.csproj", "{F1E0F1B9-59D1-4EDB-A33C-21376DA35A25}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goalsetter.WebApi", "Goalsetter.WebApi\Goalsetter.WebApi.csproj", "{51B5C8B6-A4C2-499E-814F-A896831E53AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Goalsetter.Tests", "Goalsetter.Tests\Goalsetter.Tests.csproj", "{C8B1D1FA-8A57-4D0C-A610-702BF7FDEA62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Goalsetter.Tests", "Goalsetter.Tests\Goalsetter.Tests.csproj", "{C8B1D1FA-8A57-4D0C-A610-702BF7FDEA62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

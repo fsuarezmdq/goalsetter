@@ -15,10 +15,10 @@
 	</PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Goalsetter.DomainLogic\Goalsetter.Domains.csproj" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\Goalsetter.AppServices\Goalsetter.AppServices.csproj" />
   </ItemGroup>
 
 </Project>

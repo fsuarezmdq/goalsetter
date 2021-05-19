@@ -1,25 +1,27 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Goalsetter.AppServices;
+using Goalsetter.Domains;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using AppContext = Goalsetter.DataAccess.AppContext;
+using ApplicationContext = Goalsetter.DataAccess.ApplicationContext;
 
 
 namespace Goalsetter.Tests
 {
     public class TestsBase
     {
-        protected AppContext AppContext { get; }
-        protected DbContextOptions<AppContext> ContextOptions { get; }
+        protected IApplicationContext AppContext { get; }
+        protected DbContextOptions<ApplicationContext> ContextOptions { get; }
 
-        protected TestsBase(DbContextOptions<AppContext> contextOptions)
+        protected TestsBase(DbContextOptions<ApplicationContext> contextOptions)
         {
             ContextOptions = contextOptions;
-            AppContext = new AppContext(ContextOptions);
+            AppContext = new ApplicationContext(ContextOptions);
             Seed();
         }
 
         private void Seed()
         {
-            using (var context = new AppContext(ContextOptions))
+            using (var context = new ApplicationContext(ContextOptions))
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
@@ -31,14 +33,29 @@ namespace Goalsetter.Tests
             }
         }
 
-        public void InsertEntities<T>(IEnumerable<T> entities) where T : class
+        public void InsertClients(IEnumerable<Client> entities)
         {
-            AppContext.Set<T>().AddRange(entities);
+            AppContext.Clients.AddRange(entities);
+        }
+
+        public void InsertVehicles(IEnumerable<Vehicle> entities)
+        {
+            AppContext.Vehicles.AddRange(entities);
+        }
+
+        public void InsertVehiclePrice(IEnumerable<VehiclePrice> entities)
+        {
+            AppContext.VehiclePrices.AddRange(entities);
+        }
+
+        public void InsertRentals(IEnumerable<Rental> entities)
+        {
+            AppContext.Rentals.AddRange(entities);
         }
 
         public void SaveChanges()
         {
-            AppContext.SaveChanges();
+            AppContext.SaveChangesAsync();
         }
     }
 }

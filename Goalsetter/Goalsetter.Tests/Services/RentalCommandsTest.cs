@@ -1,4 +1,5 @@
-﻿using Goalsetter.AppServices.Rentals;
+﻿using Goalsetter.AppServices;
+using Goalsetter.AppServices.Rentals;
 using Goalsetter.DataAccess;
 using Goalsetter.DataAccess.Repositories;
 using Goalsetter.Domains;

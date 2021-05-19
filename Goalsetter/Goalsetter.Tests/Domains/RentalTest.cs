@@ -8,7 +8,7 @@ using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using AppContext = Goalsetter.DataAccess.AppContext;
+using ApplicationContext = Goalsetter.DataAccess.ApplicationContext;
 
 namespace Goalsetter.Tests.Domains
 {
@@ -19,7 +19,7 @@ namespace Goalsetter.Tests.Domains
         private static Vehicle _testInactiveVehicle;
 
         public RentalTest()
-        : base (new DbContextOptionsBuilder<AppContext>()
+        : base (new DbContextOptionsBuilder<ApplicationContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options)
         {
@@ -28,8 +28,8 @@ namespace Goalsetter.Tests.Domains
             _testInactiveClient = Client.Create((ClientName)"FakeClient", (Email)"FakeMail@mail.com").Value;
             _testInactiveClient.Remove();
 
-            InsertEntities(MockedData.RentalItems);
-            InsertEntities(MockedData.VehicleItems);
+            InsertRentals(MockedData.RentalItems);
+            InsertVehicles(MockedData.VehicleItems);
             SaveChanges();
         }
         
@@ -132,8 +132,8 @@ namespace Goalsetter.Tests.Domains
         public async Task RentalCreate_WithRentedVehicleAsync()
         {
                 var unitOWork = new UnitOfWork(AppContext);
-                var vehicleRepository = new VehicleRepository(unitOWork);
-                var vehicle = await vehicleRepository.GetByIdAsync(MockedData.Vehicle.Id);
+
+                var vehicle = await unitOWork.VehicleRepository.GetByIdAsync(MockedData.Vehicle.Id);
 
                 var dateRange = DateRange.Create(new DateTime(2020, 1, 1), new DateTime(2020, 1, 2)).Value;
 

@@ -1,7 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
 using Goalsetter.AppServices.Utils;
-using Goalsetter.DataAccess;
-using Goalsetter.DataAccess.Repositories;
 using Goalsetter.Domains;
 using System;
 using System.Threading.Tasks;
@@ -38,7 +36,7 @@ namespace Goalsetter.AppServices.Vehicles
 
                 vehicle.Remove();
 
-                await _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
 
                 return Result.Success();
             }

@@ -4,27 +4,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Goalsetter.AppServices;
 
 namespace Goalsetter.DataAccess.Repositories
 {
     public class ClientRepository : IClientRepository
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public ClientRepository(IUnitOfWork unitOfWork)
+        private readonly IApplicationContext _applicationContext;
+
+        public ClientRepository(IApplicationContext applicationContext)
         {
-            _unitOfWork = unitOfWork;
+            _applicationContext = applicationContext;
         }              
 
         public async Task<Client> GetByIdAsync(Guid guid)
         {
-            return await _unitOfWork.AppContext.Set<Client>().Where(p => p.Id == guid)
+            return await _applicationContext.Clients.Where(p => p.Id == guid)
                 .Include(p=> p.Rentals)
                 .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<Client>> GetAsync()
         {
-            return await _unitOfWork.AppContext.Set<Client>()
+            return await _applicationContext.Clients
                 .Where(p=> p.IsActive)
                 .AsNoTracking()
                 .ToListAsync();
@@ -32,11 +34,11 @@ namespace Goalsetter.DataAccess.Repositories
 
         public void Save(Client vehicle)
         {
-            _unitOfWork.AppContext.Update(vehicle);
+            _applicationContext.Clients.Update(vehicle);
         }
-        public void Add(Client vehicle)
+        public void Add(Client client)
         {
-            _unitOfWork.AppContext.Add(vehicle);
+            _applicationContext.Clients.Add(client);
         }    
     }
 }

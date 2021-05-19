@@ -2,6 +2,7 @@
 using Goalsetter.AppServices.Dtos;
 using Goalsetter.AppServices.Utils;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Goalsetter.AppServices.Rentals
@@ -20,7 +21,11 @@ namespace Goalsetter.AppServices.Rentals
 
             return await _messages.Dispatch(command);
         }
-        
+
+        public async Task<IEnumerable<RentalDto>> GetRentalsAsync()
+        {
+            return await _messages.Dispatch(new GetRentalsQuery());
+        }
 
         public async Task<Result> RemoveRentalAsync(Guid id)
         {

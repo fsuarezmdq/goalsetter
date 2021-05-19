@@ -1,12 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
+using Goalsetter.AppServices.Decorators;
 using Goalsetter.AppServices.Utils;
-using Goalsetter.DataAccess;
-using Goalsetter.DataAccess.Repositories;
 using Goalsetter.Domains;
 using Goalsetter.Domains.ValueObjects;
 using System;
 using System.Threading.Tasks;
-using Goalsetter.AppServices.Decorators;
 
 namespace Goalsetter.AppServices.Rentals
 {
@@ -62,7 +60,7 @@ namespace Goalsetter.AppServices.Rentals
 
                 _rentalRepository.Add(rental.Value);
 
-                await _unitOfWork.Commit();
+                await _unitOfWork.CommitAsync();
 
                 return Result.Success();
             }
