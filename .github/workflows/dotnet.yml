@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore /Goalsetter/Goalsetter.WebApi/Goalsetter.WebApi.csproj
+      run: dotnet restore Goalsetter/Goalsetter.WebApi/Goalsetter.WebApi.csproj
     - name: Build
-      run: dotnet build --project ../Goalsetter/Goalsetter.WebApi/Goalsetter.WebApi.csproj --no-restore
+      run: dotnet build --project Goalsetter/Goalsetter.WebApi/Goalsetter.WebApi.csproj --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
