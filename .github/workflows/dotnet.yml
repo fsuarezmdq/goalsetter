@@ -20,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore ./Goalsetter/Goalsetter.sln
     - name: Build
-      run: dotnet build --project ./Goalsetter/Goalsetter.WebApi/Goalsetter.WebApi.csproj --no-restore
+      run: dotnet build ./Goalsetter/Goalsetter.WebApi/Goalsetter.WebApi.csproj --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
